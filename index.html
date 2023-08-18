@@ -57,7 +57,7 @@
             };
             const manifestJsonString = JSON.stringify(manifest, null, 4);
             document.getElementById('output').textContent = manifestJsonString;
-            return manifestJsonString; //return json
+            return manifestJsonString;
         }
 
         function generateUUID() {
@@ -68,21 +68,29 @@
             });
         }
         
+        function download(filename, text) {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        }
+        
         function downloadManifest() {
-            const manifestJsonString = generateManifest(); //get json
-            const blob = new Blob([manifestJsonString], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "manifest.json";
-            a.click();
-            URL.revokeObjectURL(url);
+            const manifestJsonString = generateManifest();
+            console.warn(manifestJsonString)
+            download("manifest.json", manifestJsonString);
         }
     </script>
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-8">
-        <h1 class="text-2xl font-bold mb-4">Minecraft Manifest Generator</h1>
+        <h1 class="text-2xl font-bold mb-4">Script Manifest Generator</h1>
         
         <label class="block mb-2" for="name">Name:</label>
         <input class="w-full p-2 border rounded mb-2" type="text" id="name">
