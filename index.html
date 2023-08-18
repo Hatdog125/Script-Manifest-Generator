@@ -55,7 +55,9 @@
                     }
                 ]
             };
-            document.getElementById('output').textContent = JSON.stringify(manifest, null, 4);
+            const manifestJsonString = JSON.stringify(manifest, null, 4);
+            document.getElementById('output').textContent = manifestJsonString;
+            return manifestJsonString; //return json
         }
 
         function generateUUID() {
@@ -67,8 +69,8 @@
         }
         
         function downloadManifest() {
-            const manifest = JSON.stringify(generateManifest(), null, 4);
-            const blob = new Blob([manifest], { type: "application/json" });
+            const manifestJsonString = generateManifest(); //get json
+            const blob = new Blob([manifestJsonString], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
