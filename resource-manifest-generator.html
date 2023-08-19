@@ -1,0 +1,102 @@
+<!<!DOCTYPE HTML>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resource Manifest Generator</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+    </head>
+    <script>
+        function generateManifest() {
+            const authorName = document.getElementById('author').value;
+
+            let authorChecker;
+
+            if (!document.getElementById('author').value) {
+                authorChecker = `${document.getElementById('description').value}`;
+            } else {
+                authorChecker = `${document.getElementById('description').value} by ${authorName}`;
+            }
+
+            const manifest = {
+                "format_version": 2,
+                "header": {
+                    "description": authorChecker,
+                    "name": document.getElementById('name').value,
+                    "uuid": generateUUID(),
+                    "version": [0,
+                        0,
+                        1],
+                    "min_engine_version": [1,
+                        20,
+                        20]
+                },
+                "modules": [{
+                    "description": authorChecker,
+                    "type": "resources",
+                    "uuid": generateUUID(),
+                    "version": [0,
+                        0,
+                        1]
+                }]
+            }
+            const manifestJsonString = JSON.stringify(manifest, null, 4);
+            document.getElementById('output').textContent = manifestJsonString;
+            return manifestJsonString;
+        }
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0,
+                v = c == 'x' ? r: (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function download(filename, text) {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        }
+
+        function downloadManifest() {
+            const manifestJsonString = generateManifest();
+            download("manifest.json", manifestJsonString);
+        }
+
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('author').value = '';
+            document.getElementById('output').textContent = '';
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+    <body class="bg-gray-10₩">
+        <div class="container mx-auto p-8">
+            <h1 class="text-2xl font-bold mb-4">Resource Manifest Generator</h1>
+
+            <label class="block mb-2" for="name">Name:</label>
+            <input class="w-full p-2 border rounded mb-2" type="text" id="name" required="">
+
+            <label class="block mb-2" for="description">Description:</label>
+            <input class="w-full p-2 border rounded mb-2" type="text" id="description">
+
+            <label class="block mb-2" for="author">Author:</label>
+            <input class="w-full p-2 border rounded mb-2" type="text" id="author">
+
+            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4" onclick="downloadManifest()">Generate Manifest</button>
+            <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded mt-4 ml-2" onclick="clearForm()">Clear</button>
+
+            <pre class="bg-gray-200 p-4 mt-4 rounded" id="output"></pre>
+        </div>
+
+    </body>
+</html>
