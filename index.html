@@ -1,108 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Script Manifest Generator</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-    <script>
-        function generateManifest() {
-            const selectedVersion = document.getElementById('version').value;
-            let serverVersion = "1.5.0-beta";
-            let serverUiVersion = "1.2.0-beta";
-            
-            if (selectedVersion === "stable") {
-                serverVersion = "1.4.0-beta";
-                serverUiVersion = "1.2.0-beta";
-            } else if (selectedVersion === "beta") {
-                serverVersion = "1.5.0-beta";
-                serverUiVersion = "1.2.0-beta";
-            } else if (selectedVersion === "preview") {
-                serverVersion = "1.6.0-beta";
-                serverUiVersion = "1.2.0-beta";
-            }
-
-            const authorName = document.getElementById('author').value;
-            const manifest = {
-                "format_version": 2,
-                "header": {
-                    "name": document.getElementById('name').value,
-                    "description": `${document.getElementById('description').value} - ${authorName}`,
-                    "uuid": generateUUID(),
-                    "min_engine_version": [1, 20, 0],
-                    "version": [1, 0, 0]
-                },
-                "modules": [
-                    {
-                        "type": "script",
-                        "language": "javascript",
-                        "entry": "scripts/index.js",
-                        "uuid": generateUUID(),
-                        "version": [1, 0, 0]
-                    },
-                    {
-                        "type": "data",
-                        "uuid": generateUUID(),
-                        "version": [1, 0, 0]
-                    }
-                ],
-                "dependencies": [
-                    {
-                        "module_name": "@minecraft/server",
-                        "version": serverVersion
-                    },
-                    {
-                        "module_name": "@minecraft/server-ui",
-                        "version": serverUiVersion
-                    }
-                ]
-            };
-            const manifestJsonString = JSON.stringify(manifest, null, 4);
-            document.getElementById('output').textContent = manifestJsonString;
-            return manifestJsonString; //return json
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manifest Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-image: url('https://media.discordapp.net/attachments/1142076733365944420/1142918031140454490/fondo.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
         }
-
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                const r = Math.random() * 16 | 0,
-                    v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
-        
-        function downloadManifest() {
-            const manifestJsonString = generateManifest(); //get json
-            const blob = new Blob([manifestJsonString], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "manifest.json";
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-    </script>
+    </style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto p-8">
-        <h1 class="text-2xl font-bold mb-4">Minecraft Manifest Generator</h1>
-        
-        <label class="block mb-2" for="name">Name:</label>
-        <input class="w-full p-2 border rounded mb-2" type="text" id="name">
-        
-        <label class="block mb-2" for="description">Description:</label>
-        <input class="w-full p-2 border rounded mb-2" type="text" id="description">
-        
-        <label class="block mb-2" for="version">Version:</label>
-        <select class="w-full p-2 border rounded mb-2" id="version">
-            <option value="stable">Stable</option>
-            <option value="beta">Beta</option>
-            <option value="preview">Preview</option>
-        </select>
-        
-        <label class="block mb-2" for="author">Author:</label>
-        <input class="w-full p-2 border rounded mb-2" type="text" id="author">
-        
-        <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4" onclick="downloadManifest()">Generate Manifest</button>
-        
-        <pre class="bg-gray-200 p-4 mt-4 rounded" id="output"></pre>
+<body class="h-screen flex justify-center items-center">
+    <div class="text-center flex flex-col items-center">
+        <h1 class="text-4xl font-bold mb-4 text-white">
+            <img src="https://images-ext-2.discordapp.net/external/ld5ZpL3UdZxFP946NH0puDd3L2RO9qkMz7g7NrcKpvo/https/theme.zdassets.com/theme_assets/2155033/bc270c23058d513de5124ffea6bf9199af7a2370.png" alt="Game Icon" class="inline-block w-16 h-16 mr-2">
+            Manifest Generators
+        </h1>
+        <a href="script-manifest-gen.html" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg mb-2">
+            Script Manifest Generator
+        </a>
+        <a href="resource-manifest-generator.html" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg">
+            Resource Manifest Generator
+        </a>
     </div>
 </body>
+<script></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
 </html>
